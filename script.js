@@ -75,5 +75,5 @@ submitBtn.addEventListener('click',(e)=>{
     if(questions[i].answer===userAnswers[i])score++;
   }
   localStorage.setItem('score',score);
-  scoreDiv.innerText=`Your score is ${score} out of 5`;
+  scoreDiv.innerText=`Your score is ${score} out of 5.`;
 })

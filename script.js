@@ -31,6 +31,8 @@ const questions = [
 ];
 
 // Display the quiz questions and choices
+let questionsElement = document.getElementById("questions");
+let userAnswers = JSON.parse(sessionStorage.getItem("progress")) || [];
 function renderQuestions() {
   for (let i = 0; i < questions.length; i++) {
     const question = questions[i];
@@ -43,14 +45,35 @@ function renderQuestions() {
       choiceElement.setAttribute("type", "radio");
       choiceElement.setAttribute("name", `question-${i}`);
       choiceElement.setAttribute("value", choice);
-      if (userAnswers[i] === choice) {
+      if (i<userAnswers.length && userAnswers[i] === choice) {
         choiceElement.setAttribute("checked", true);
       }
       const choiceText = document.createTextNode(choice);
       questionElement.appendChild(choiceElement);
       questionElement.appendChild(choiceText);
+
+      choiceElement.addEventListener("change",() => {
+        if (choiceElement.checked) {
+          userAnswers[i] = choice;
+          sessionStorage.setItem('progress',JSON.stringify(userAnswers))
+        }
+      });
+
     }
+
     questionsElement.appendChild(questionElement);
   }
 }
 renderQuestions();
+let submitBtn = document.getElementById('submit');
+let scoreDiv = document.getElementById('score');
+let score;
+submitBtn.addEventListener('click',(e)=>{
+  score=0;
+  e.preventDefault();
+  for(let i=0;i<questions.length;i++){
+    if(questions[i].answer===userAnswers[i])score++;
+  }
+  localStorage.setItem('score',score);
+  scoreDiv.innerText=`Your score is ${score} out of 5`;
+})
